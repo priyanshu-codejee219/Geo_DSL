@@ -201,5 +201,7 @@ class Lexer:
                 break
 
         word = "".join(buf)
-        ttype = KEYWORDS.get(word, TokenType.IDENT)
+        ttype = KEYWORDS.get(
+            word, TokenType.IDENT
+        )  # if the key for qord exists, then return that, else it is ident.
         self._add(ttype, word, start_line, start_col)
