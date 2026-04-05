@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
-from .token_types import TokenType
+from .token_types import KEYWORDS, TokenType
 
 
 @dataclass(frozen=True)
@@ -89,6 +89,18 @@ class Lexer:
 
             return
 
+        if ch == '"':
+            self._scan_string(start_line, start_col)
+            return
+
+        if ch.isdigit():
+            self._scan_number(ch, start_line, start_col)
+            return
+
+        if ch.isalpha() or ch == "_":
+            self._scan_word(ch, start_line, start_col)
+            return
+
         if ch == "!":
             if self._match("="):
                 self._add(TokenType.NEQ, "!=", start_line, start_col)
@@ -132,3 +144,62 @@ class Lexer:
             return
 
         raise LexerError(f"Unexpected character {ch!r}", start_line, start_col)
+
+    def _scan_string(self, start_line: int, start_col: int) -> None:
+
+        buf: List[str] = []
+        while not self._at_end():
+            ch = self._peek()
+            if ch == '"':
+                self._advance()
+                self._add(TokenType.STRING, "".join(buf), start_line, start_col)
+                return
+            if ch == "\n":
+                raise LexerError(
+                    "Unterminated string literal — closing '\"' missing",
+                    start_line,
+                    start_col,
+                )
+            buf.append(self._advance())
+
+        raise LexerError(
+            "Unterminated string literal — reached end of file", start_line, start_col
+        )
+
+    def _scan_number(self, first_digit: str, start_line: int, start_col: int) -> None:
+
+        buf: List[str] = [first_digit]
+
+        # Integer part
+        while not self._at_end() and self._peek().isdigit():
+            buf.append(self._advance())
+
+        if self._peek() == "." and self._peek(1).isdigit():
+            buf.append(self._advance())
+            while not self._at_end() and self._peek().isdigit():
+                buf.append(self._advance())
+
+        self._add(TokenType.NUMBER, "".join(buf), start_line, start_col)
+
+        if self._peek(0) == "d" and self._peek(1) == "e" and self._peek(2) == "g":
+            next_after_deg = self._peek(3)
+            if not (next_after_deg.isalnum() or next_after_deg == "_"):
+                deg_col = self._col
+                self._advance()  # d
+                self._advance()  # e
+                self._advance()  # g
+                self._add(TokenType.DEG, "deg", self._line, deg_col)
+
+    def _scan_word(self, first_char: str, start_line: int, start_col: int) -> None:
+
+        buf: List[str] = [first_char]
+        while not self._at_end():
+            ch = self._peek()
+            if ch.isalnum() or ch == "_":
+                buf.append(self._advance())
+            else:
+                break
+
+        word = "".join(buf)
+        ttype = KEYWORDS.get(word, TokenType.IDENT)
+        self._add(ttype, word, start_line, start_col)
