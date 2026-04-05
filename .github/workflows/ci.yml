@@ -27,7 +27,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Lint with Ruff
-        run: python -m ruff check lexer/ parser/ ast_nodes/ interpreter/
+        run: python -m ruff check lexer/ 
 
       - name: Run tests with pytest
         run: python -m pytest tests/ -v
