@@ -9,55 +9,8 @@ from typing import Dict, List, Optional, Set, Tuple
 # Make the project root importable when running the file directly
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from ast_nodes.nodes import (
-    AngleLiteral,
-    AngleMeasure,
-    AreaMeasure,
-    AssertStmt,
-    BinOp,
-    CallStmt,
-    CmpExpr,
-    ConstraintStmt,
-    DefineStmt,
-    DerivedDecl,
-    DistanceMeasure,
-    ForStmt,
-    GeometricPred,
-    GridStmt,
-    HideStmt,
-    IdentExpr,
-    IfStmt,
-    LabelStmt,
-    LengthMeasure,
-    LetStmt,
-    MeasureStmt,
-    NoteStmt,
-    NumberLiteral,
-    ParamStmt,
-    PerimeterMeasure,
-    PosConstraint,
-    PrimitiveDecl,
-    Program,
-    RadiusMeasure,
-    RatioLiteral,
-    RatioMeasure,
-    ReflectStmt,
-    RelConstraint,
-    ReturnStmt,
-    RotateStmt,
-    ScaleStmt,
-    SetStmt,
-    Statement,
-    StringLiteral,
-    SweepStmt,
-    TranslateStmt,
-    UnaryOp,
-    VectorExpr,
-)
 
 # Symbol kinds maintained in the symbol table.
-
-
 class Kind(Enum):
     SHAPE = auto() 
     LET = auto()
