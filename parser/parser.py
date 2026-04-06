@@ -1,35 +1,56 @@
 from __future__ import annotations
 
-from typing import List
+from typing import List, Optional
 
 from ast_nodes.nodes import (
     AngleLiteral,
+    AngleMeasure,
+    AreaMeasure,
+    AssertStmt,
     BinOp,
     BoolExpr,
-    # expressions
     CallExpr,
+    CallStmt,
     CmpExpr,
     ConstraintClause,
-    # constraint stmt
     ConstraintStmt,
+    DefineStmt,
     DerivedDecl,
-    # measure stmts
+    DistanceMeasure,
+    ElseIfClause,
     Expr,
+    ForStmt,
     GeometricPred,
+    GridStmt,
+    HideStmt,
     IdentExpr,
+    IfStmt,
+    LabelStmt,
+    LengthMeasure,
+    LetStmt,
+    MeasureStmt,
+    NoteStmt,
     NumberLiteral,
+    ParamStmt,
+    PerimeterMeasure,
     PosConstraint,
-    # shape declarations
     PrimitiveDecl,
     Program,
-    # building blocks
     PropAssign,
+    RadiusMeasure,
+    RangeSpec,
     RatioLiteral,
+    RatioMeasure,
+    ReflectStmt,
     RelConstraint,
-    # function stmts
+    ReturnStmt,
+    RotateStmt,
+    ScaleStmt,
+    SetStmt,
     Statement,
     StringLiteral,
-    # control stmts
+    SweepStmt,
+    TranslateStmt,
     UnaryOp,
     VectorExpr,
 )
@@ -163,21 +184,60 @@ class Parser:
 
     def parse(self) -> Program:
         statements: List[Statement] = []
-        while self.cur().type != TokenType.EOF:
+        while self._cur().type != TokenType.EOF:
             statements.append(self._parse_statement())
-            self._skip_newlines
+            self._skip_newlines()
         return Program(statements=statements)
-
-    # RULE 1 of grammar
 
     def _parse_statement(self) -> Statement:
         tok = self._cur()
-        tt = tok.type()
+        tt = tok.type
 
         if tt in _PRIM_KWS:
-            return self.parse_primitive_decl()
+            return self._parse_primitive_decl()
+        if tt in _DERIVED_KWS:
+            return self._parse_derived_decl()
 
-    # RULE 2 - Primitive decl
+        if tt in _MEASURE_KWS:
+            return self._parse_measure_stmt()
+
+        if tt == TokenType.LET:
+            return self._parse_let_stmt()
+        if tt == TokenType.SET:
+            return self._parse_set_stmt()
+        if tt == TokenType.PARAM:
+            return self._parse_param_stmt()
+
+        if tt == TokenType.SWEEP:
+            return self._parse_sweep_stmt()
+        if tt == TokenType.IF:
+            return self._parse_if_stmt()
+        if tt == TokenType.FOR:
+            return self._parse_for_stmt()
+
+        if tt == TokenType.DEFINE:
+            return self._parse_define_stmt()
+        if tt == TokenType.CALL:
+            return self._parse_call_stmt()
+        if tt == TokenType.RETURN:
+            return self._parse_return_stmt()
+
+        if tt in _TRANSFORM_KWS:
+            return self._parse_transform_stmt()
+
+        if tt == TokenType.ASSERT:
+            return self._parse_assert_stmt()
+
+        if tt in _RENDER_KWS:
+            return self._parse_render_stmt()
+
+        if (
+            tt == TokenType.IDENT
+            and peek(self._tokens, self._pos, 1).type in _CONSTRAINT_KWS
+        ):
+            return self._parse_constraint_stmt()
+
+        raise ParseError("Unexpected token — cannot begin a statement", tok)
 
     def _parse_primitive_decl(self) -> PrimitiveDecl:
         kw_tok, self._pos = advance(self._tokens, self._pos)
@@ -227,17 +287,45 @@ class Parser:
         value = self._parse_expr()
         return PropAssign(name=prop_tok.value, value=value)
 
-    # RUle -3
-
     def _parse_derived_decl(self) -> DerivedDecl:
-        kw_tok, self._pos = advance(self.tokens, self._pos)
-        kw = kw_tok.tpye
+        kw_tok, self._pos = advance(self._tokens, self._pos)
+        kw = kw_tok.type
 
         if kw == TokenType.LOCUS:
             return self._parse_locus()
 
         name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
         _, self._pos = expect(self._tokens, self._pos, TokenType.OF)
+
+        args: List[str] = []
+
+        if kw == TokenType.ANGLE_BISECTOR:
+            a_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            b_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            c_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            args = [a_tok.value, b_tok.value, c_tok.value]
+
+        elif kw == TokenType.INTERSECTION:
+            a_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            b_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            args = [a_tok.value, b_tok.value]
+
+        elif kw == TokenType.CONVEX_HULL:
+            first_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            args.append(first_tok.value)
+            while self._cur().type == TokenType.IDENT:
+                more_tok, self._pos = advance(self._tokens, self._pos)
+                args.append(more_tok.value)
+
+        else:
+            arg_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            args.append(arg_tok.value)
+
+        return DerivedDecl(
+            kind=kw_tok.value,
+            name=name_tok.value,
+            args=args,
+        )
 
     def _parse_locus(self) -> DerivedDecl:
         _, self._pos = expect(self._tokens, self._pos, TokenType.OF)
@@ -263,7 +351,6 @@ class Parser:
             locus_constraint=bool_ex,
         )
 
-    # RULE - 4
     def _parse_constraint_clause(self) -> ConstraintClause:
         tt = self._cur().type
         if tt in _POS_CONSTRAINT_KWS:
@@ -272,7 +359,7 @@ class Parser:
             return self._parse_rel_constraint()
         raise ParseError("Expected a constraint keyword", self._cur())
 
-    def _parse_pos_contraint(self) -> PosConstraint:
+    def _parse_pos_constraint(self) -> PosConstraint:
         kw_tok, self._pos = advance(self._tokens, self._pos)
         kw = kw_tok.type
 
@@ -305,15 +392,272 @@ class Parser:
         name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
         return RelConstraint(kind=kw_tok.value, target=name_tok.value)
 
-    # --------------------------------------
-    # RULE 5
-
     def _parse_constraint_stmt(self) -> ConstraintStmt:
         subj_tok, self._pos = advance(self._tokens, self._pos)
         constraint = self._parse_constraint_clause()
         return ConstraintStmt(subject=subj_tok.value, constraint=constraint)
 
-    # RULE -13
+    def _parse_measure_stmt(self):
+        kw_tok, self._pos = advance(self._tokens, self._pos)
+        kw = kw_tok.type
+
+        if kw == TokenType.DISTANCE:
+            a_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            b_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            _, self._pos = expect(self._tokens, self._pos, TokenType.EQ)
+            value = self._parse_expr()
+            return DistanceMeasure(
+                point_a=a_tok.value, point_b=b_tok.value, value=value
+            )
+
+        if kw == TokenType.ANGLE:
+            name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            _, self._pos = expect(self._tokens, self._pos, TokenType.EQ)
+            ang_val = self._parse_angle_val()
+            return AngleMeasure(angle_name=name_tok.value, value=ang_val)
+
+        if kw in (
+            TokenType.LENGTH,
+            TokenType.RADIUS,
+            TokenType.AREA,
+            TokenType.PERIMETER,
+        ):
+            _, self._pos = expect(self._tokens, self._pos, TokenType.OF)
+            name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            _, self._pos = expect(self._tokens, self._pos, TokenType.EQ)
+            value = self._parse_expr()
+            if kw == TokenType.LENGTH:
+                return LengthMeasure(shape_name=name_tok.value, value=value)
+            if kw == TokenType.RADIUS:
+                return RadiusMeasure(shape_name=name_tok.value, value=value)
+            if kw == TokenType.AREA:
+                return AreaMeasure(shape_name=name_tok.value, value=value)
+            return PerimeterMeasure(shape_name=name_tok.value, value=value)
+
+        if kw == TokenType.RATIO:
+            _, self._pos = expect(self._tokens, self._pos, TokenType.OF)
+            a_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            _, self._pos = expect(self._tokens, self._pos, TokenType.TO)
+            b_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            _, self._pos = expect(self._tokens, self._pos, TokenType.EQ)
+            ratio_v = self._parse_ratio_val()
+            return RatioMeasure(shape_a=a_tok.value, shape_b=b_tok.value, value=ratio_v)
+
+        raise ParseError("Unrecognised measurement keyword", kw_tok)
+
+    def _parse_let_stmt(self) -> LetStmt:
+        self._pos += 1
+        name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.EQ)
+        value = self._parse_expr()
+        return LetStmt(name=name_tok.value, value=value)
+
+    def _parse_set_stmt(self) -> SetStmt:
+        self._pos += 1
+        name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.EQ)
+        value = self._parse_expr()
+        return SetStmt(name=name_tok.value, value=value)
+
+    def _parse_param_stmt(self) -> ParamStmt:
+        self._pos += 1
+        name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        range_spec = self._parse_range_spec()
+        return ParamStmt(name=name_tok.value, range_spec=range_spec)
+
+    def _parse_range_spec(self) -> RangeSpec:
+        _, self._pos = expect(self._tokens, self._pos, TokenType.FROM)
+        start = self._parse_expr()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.TO)
+        end = self._parse_expr()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.STEP)
+        step = self._parse_expr()
+        return RangeSpec(start=start, end=end, step=step)
+
+    def _parse_sweep_stmt(self) -> SweepStmt:
+        self._pos += 1
+        first_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        params = [first_tok.value]
+        while self._cur().type == TokenType.COMMA:
+            self._pos += 1
+            more_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            params.append(more_tok.value)
+
+        speed: Optional[Expr] = None
+        if self._cur().type == TokenType.SPEED:
+            self._pos += 1
+            speed = self._parse_expr()
+
+        return SweepStmt(params=params, speed=speed)
+
+    def _parse_if_stmt(self) -> IfStmt:
+        self._pos += 1
+        condition = self._parse_bool_expr()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.LBRACE)
+        body = self._parse_block()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.RBRACE)
+
+        else_ifs: List[ElseIfClause] = []
+        else_body: Optional[List[Statement]] = None
+
+        while (
+            self._cur().type == TokenType.ELSE
+            and peek(self._tokens, self._pos, 1).type == TokenType.IF
+        ):
+            self._pos += 1
+            self._pos += 1
+            ei_cond = self._parse_bool_expr()
+            _, self._pos = expect(self._tokens, self._pos, TokenType.LBRACE)
+            ei_body = self._parse_block()
+            _, self._pos = expect(self._tokens, self._pos, TokenType.RBRACE)
+            else_ifs.append(ElseIfClause(condition=ei_cond, body=ei_body))
+
+        if self._cur().type == TokenType.ELSE:
+            self._pos += 1
+            _, self._pos = expect(self._tokens, self._pos, TokenType.LBRACE)
+            else_body = self._parse_block()
+            _, self._pos = expect(self._tokens, self._pos, TokenType.RBRACE)
+
+        return IfStmt(
+            condition=condition,
+            body=body,
+            else_ifs=else_ifs,
+            else_body=else_body,
+        )
+
+    def _parse_for_stmt(self) -> ForStmt:
+        self._pos += 1
+        var_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.IN)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.LBRACKET)
+
+        values: List[Expr] = [self._parse_expr()]
+        while self._cur().type == TokenType.COMMA:
+            self._pos += 1
+            values.append(self._parse_expr())
+
+        _, self._pos = expect(self._tokens, self._pos, TokenType.RBRACKET)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.LBRACE)
+        body = self._parse_block()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.RBRACE)
+
+        return ForStmt(var=var_tok.value, values=values, body=body)
+
+    def _parse_block(self) -> List[Statement]:
+        stmts: List[Statement] = []
+        self._skip_newlines()
+        while self._cur().type not in (TokenType.RBRACE, TokenType.EOF):
+            stmts.append(self._parse_statement())
+            self._skip_newlines()
+        return stmts
+
+    def _parse_define_stmt(self) -> DefineStmt:
+        self._pos += 1
+        name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.LPAREN)
+
+        params: List[str] = []
+        if self._cur().type == TokenType.IDENT:
+            p_tok, self._pos = advance(self._tokens, self._pos)
+            params.append(p_tok.value)
+            while self._cur().type == TokenType.COMMA:
+                self._pos += 1
+                p_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+                params.append(p_tok.value)
+
+        _, self._pos = expect(self._tokens, self._pos, TokenType.RPAREN)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.LBRACE)
+        body = self._parse_block()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.RBRACE)
+
+        return DefineStmt(name=name_tok.value, params=params, body=body)
+
+    def _parse_call_stmt(self) -> CallStmt:
+        self._pos += 1
+        name_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.LPAREN)
+
+        args: List[Expr] = []
+        if self._cur().type != TokenType.RPAREN:
+            args.append(self._parse_expr())
+            while self._cur().type == TokenType.COMMA:
+                self._pos += 1
+                args.append(self._parse_expr())
+
+        _, self._pos = expect(self._tokens, self._pos, TokenType.RPAREN)
+        return CallStmt(name=name_tok.value, args=args)
+
+    def _parse_return_stmt(self) -> ReturnStmt:
+        self._pos += 1
+        tt = self._cur().type
+        if tt in (TokenType.RBRACE, TokenType.EOF, TokenType.NEWLINE):
+            return ReturnStmt(value=None)
+        return ReturnStmt(value=self._parse_expr())
+
+    def _parse_transform_stmt(self):
+        kw_tok, self._pos = advance(self._tokens, self._pos)
+        kw = kw_tok.type
+
+        target_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+        _, self._pos = expect(
+            self._tokens,
+            self._pos,
+            TokenType.BY if kw != TokenType.REFLECT else TokenType.OVER,
+        )
+
+        if kw == TokenType.REFLECT:
+            over_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            return ReflectStmt(target=target_tok.value, over=over_tok.value)
+
+        if kw == TokenType.ROTATE:
+            angle = self._parse_angle_val()
+            _, self._pos = expect(self._tokens, self._pos, TokenType.ABOUT)
+            about_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            return RotateStmt(target=target_tok.value, by=angle, about=about_tok.value)
+
+        if kw == TokenType.SCALE:
+            factor = self._parse_expr()
+            return ScaleStmt(target=target_tok.value, by=factor)
+
+        if kw == TokenType.TRANSLATE:
+            vec = self._parse_vector_expr()
+            return TranslateStmt(target=target_tok.value, by=vec)
+
+        raise ParseError("Unrecognised transformation keyword", kw_tok)
+
+    def _parse_assert_stmt(self) -> AssertStmt:
+        self._pos += 1
+        return AssertStmt(expr=self._parse_bool_expr())
+
+    def _parse_render_stmt(self):
+        kw_tok, self._pos = advance(self._tokens, self._pos)
+        kw = kw_tok.type
+
+        if kw == TokenType.LABEL:
+            tgt_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            str_tok, self._pos = expect(self._tokens, self._pos, TokenType.STRING)
+            return LabelStmt(target=tgt_tok.value, text=str_tok.value)
+
+        if kw == TokenType.NOTE:
+            str_tok, self._pos = expect(self._tokens, self._pos, TokenType.STRING)
+            return NoteStmt(text=str_tok.value)
+
+        if kw == TokenType.HIDE:
+            first_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            targets = [first_tok.value]
+            while self._cur().type == TokenType.IDENT:
+                more_tok, self._pos = advance(self._tokens, self._pos)
+                targets.append(more_tok.value)
+            return HideStmt(targets=targets)
+
+        if kw == TokenType.GRID:
+            return GridStmt()
+
+        if kw == TokenType.MEASURE:
+            tgt_tok, self._pos = expect(self._tokens, self._pos, TokenType.IDENT)
+            return MeasureStmt(target=tgt_tok.value)
+
+        raise ParseError("Unrecognised render keyword", kw_tok)
 
     def _parse_expr(self) -> Expr:
         return self._parse_add_expr()
@@ -382,7 +726,7 @@ class Parser:
             raise ParseError("Expected a function call", tok)
 
         if tt == TokenType.LPAREN:
-            self._pos += 1  # consume '('
+            self._pos += 1
             first = self._parse_expr()
 
             if self._cur().type == TokenType.COMMA:
@@ -392,11 +736,10 @@ class Parser:
                 return VectorExpr(x=first, y=second)
 
             _, self._pos = expect(self._tokens, self._pos, TokenType.RPAREN)
-            return first  # grouped expr
+            return first
 
         raise ParseError("Expected a primary expression", tok)
 
-    # RUle -14
     def _parse_bool_expr(self) -> BoolExpr:
         if (
             self._cur().type == TokenType.IDENT
@@ -420,7 +763,31 @@ class Parser:
         right = self._parse_expr()
         return CmpExpr(op=op_tok.value, left=left, right=right)
 
-    # Helper Functions
+    def _parse_angle_val(self) -> AngleLiteral:
+        num_tok, self._pos = expect(self._tokens, self._pos, TokenType.NUMBER)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.DEG)
+        return AngleLiteral(degrees=float(num_tok.value))
+
+    def _parse_ratio_val(self) -> RatioLiteral:
+        lhs_tok, self._pos = expect(self._tokens, self._pos, TokenType.NUMBER)
+        _, self._pos = expect(self._tokens, self._pos, TokenType.COLON)
+        rhs_tok, self._pos = expect(self._tokens, self._pos, TokenType.NUMBER)
+        return RatioLiteral(left=float(lhs_tok.value), right=float(rhs_tok.value))
+
+    def _parse_vector_expr(self) -> VectorExpr:
+        _, self._pos = expect(self._tokens, self._pos, TokenType.LPAREN)
+        x = self._parse_expr()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.COMMA)
+        y = self._parse_expr()
+        _, self._pos = expect(self._tokens, self._pos, TokenType.RPAREN)
+        return VectorExpr(x=x, y=y)
+
+    def _cur(self) -> Token:
+        return (
+            self._tokens[self._pos]
+            if self._pos < len(self._tokens)
+            else self._tokens[-1]
+        )
 
     def _skip_newlines(self) -> None:
         while (
@@ -429,7 +796,6 @@ class Parser:
         ):
             self._pos += 1
 
-    def _cur(self) -> Token:
-        if self._pos < len(self._tokens):
-            return self._tokens[self._pos]
-        return self._tokens[-1]
+
+def parse(tokens: List[Token]) -> Program:
+    return Parser(tokens).parse()
