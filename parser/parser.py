@@ -187,7 +187,8 @@ class Parser:
         while self._cur().type != TokenType.EOF:
             statements.append(self._parse_statement())
             self._skip_newlines()
-        return Program(statements=statements)
+         
+        return Program(statements = statements)
 
     def _parse_statement(self) -> Statement:
         tok = self._cur()

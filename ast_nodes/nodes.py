@@ -389,6 +389,6 @@ Statement = Union[
     ReturnStmt,
 ]
 
-
+@dataclass
 class Program:
     statements: List[Statement]
