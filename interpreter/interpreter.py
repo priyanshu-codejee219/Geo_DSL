@@ -1,16 +1,14 @@
 # importing required modules
 import math
 from typing import Any, Dict, List, Optional, Tuple
-
 # simple point class to store x and y
 class GeoPoint:
     __slots__ = ("name", "x", "y")
-
+    
     def __init__(self, name: str, x: float, y: float):
         self.name = name
         self.x = x
         self.y = y
-
 
 # class to store any geometric shape
 class GeoShape:
@@ -45,7 +43,33 @@ class Interpreter:
     def run(self, program):
         for stmt in program.statements:
             self._exec(stmt)
-
-    #Here we  decide which function to call
+    # handle different statements
     def _exec(self, stmt):
-        print("Executing:", type(stmt).__name__)
+        # variable declaration
+        if stmt.type == "let":
+            self.env[stmt.name] = self._eval(stmt.value)
+        # shape creation
+        elif stmt.type == "shape":
+            shape = GeoShape(stmt.kind, stmt.name)
+            self.shapes.append((stmt.name, shape))
+            self.env[stmt.name] = shape
+        else:
+            print("Unknown statement")
+            
+    # evaluate expressions
+    def _eval(self, expr):
+        # number value
+        if expr.type == "number":
+            return expr.value
+        # variable access
+        if expr.type == "identifier":
+            return self.env.get(expr.name)
+        # binary operation
+        if expr.type == "binop":
+            left = self._eval(expr.left)
+            right = self._eval(expr.right)
+            if expr.op == "+":
+                return left + right
+            if expr.op == "-":
+                return left - right
+        return None
