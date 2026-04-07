@@ -1,75 +1,65 @@
-# Custom error classes used by the GeoScript interpreter
-# base error class for the DSL
+# basic error classes used in interpreter
+
 class GeoScriptError(Exception):
+    # base class for all errors
     def __init__(self, message: str, hint: str = "") -> None:
-        # build error message
         full = f"[GeoScript] {message}"
         if hint:
             full += f"\nHint: {hint}"
-
         super().__init__(full)
         self.message = message
         self.hint = hint
 
-
-# generic runtime error during execution
+# general error during execution
 class GeoRuntimeError(GeoScriptError):
     pass
 
-
-# raised when a variable or identifier is not found
+# error when variable is not found
 class GeoNameError(GeoRuntimeError):
     def __init__(self, name: str) -> None:
         super().__init__(
             f"Undefined name '{name}'",
-            hint="Maybe it was not declared.",
+            hint="Declare it first",
         )
         self.name = name
 
-
-# raised when wrong type of value is used
+# error when wrong type is used
 class GeoTypeError(GeoRuntimeError):
     def __init__(self, message: str) -> None:
         super().__init__(message)
 
-
-# division by zero error
+# error for division by zero
 class GeoDivisionByZero(GeoRuntimeError):
     def __init__(self) -> None:
         super().__init__("Division by zero")
 
-
-# constraint related error in geometry
+# error for invalid constraints
 class GeoConstraintError(GeoRuntimeError):
     def __init__(self, message: str) -> None:
         super().__init__(message)
 
-
-# incorrect number of arguments in a function
+# error when arguments are wrong
 class GeoArgumentError(GeoRuntimeError):
     def __init__(self, func_name: str, expected: int, got: int) -> None:
         super().__init__(
             f"{func_name} expects {expected} arguments but got {got}"
         )
 
-
-# raised when trying to modify immutable variable
+# error when trying to change fixed variable
 class GeoImmutableError(GeoRuntimeError):
     def __init__(self, name: str) -> None:
         super().__init__(
-            f"Cannot modify '{name}', it was not declared with let"
+            f"Cannot modify '{name}', not declared with let"
         )
         self.name = name
 
-
-# assertion failure inside the DSL
+# error when assert fails
 class GeoAssertionError(GeoScriptError):
     def __init__(self, description: str) -> None:
         super().__init__(f"Assertion failed: {description}")
         self.description = description
 
-
-# used internally to handle return statements in functions
+# used to return value from function
 class ReturnSignal(Exception):
     def __init__(self, value=None) -> None:
         super().__init__()
