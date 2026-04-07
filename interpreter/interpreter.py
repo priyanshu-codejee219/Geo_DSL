@@ -33,3 +33,19 @@ class UserFunction:
         self.params = params
         self.body = body
         self.closure = closure
+# main interpreter class
+class Interpreter:
+
+    # constructor
+    def __init__(self):
+        self.env = {}
+        self.shapes = []
+
+    #Here we run all the statements
+    def run(self, program):
+        for stmt in program.statements:
+            self._exec(stmt)
+
+    #Here we  decide which function to call
+    def _exec(self, stmt):
+        print("Executing:", type(stmt).__name__)
