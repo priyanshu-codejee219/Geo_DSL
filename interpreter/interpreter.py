@@ -1,20 +1,41 @@
-# importing required modules
+from __future__ import annotations
 import math
 from typing import Any, Dict, List, Optional, Tuple
-# simple point class to store x and y
+
+from .environment import Environment
+from .errors import (
+    GeoArgumentError,
+    GeoAssertionError,
+    GeoConstraintError,
+    GeoDivisionByZero,
+    GeoNameError,
+    GeoRuntimeError,
+    GeoTypeError,
+    ReturnSignal,
+)
+
+# stores a point with x and y
 class GeoPoint:
     __slots__ = ("name", "x", "y")
-    
-    def __init__(self, name: str, x: float, y: float):
+
+    def __init__(self, name: str, x: float, y: float) -> None:
         self.name = name
         self.x = x
         self.y = y
 
-# class to store any geometric shape
+
+# stores any geometric shape
 class GeoShape:
     __slots__ = ("kind", "name", "props", "constraints", "points")
 
-    def __init__(self, kind, name, props=None, constraints=None, points=None):
+    def __init__(
+        self,
+        kind: str,
+        name: str,
+        props: Optional[Dict[str, Any]] = None,
+        constraints: Optional[List[Any]] = None,
+        points: Optional[List[GeoPoint]] = None,
+    ) -> None:
         self.kind = kind
         self.name = name
         self.props = props or {}
@@ -22,54 +43,143 @@ class GeoShape:
         self.points = points or []
 
 
-# class for user defined functions
+# stores user defined function
 class UserFunction:
     __slots__ = ("name", "params", "body", "closure")
 
-    def __init__(self, name, params, body, closure):
+    def __init__(
+        self,
+        name: str,
+        params: List[str],
+        body: List[Any],
+        closure: Environment,
+    ) -> None:
         self.name = name
         self.params = params
         self.body = body
         self.closure = closure
+
+
 # main interpreter class
 class Interpreter:
 
-    # constructor
-    def __init__(self):
-        self.env = {}
-        self.shapes = []
+    # initialize everything
+    def __init__(self, geometry_backend: Optional[Any] = None) -> None:
+        self.env: Environment = Environment()
 
-    #Here we run all the statements
-    def run(self, program):
-        for stmt in program.statements:
-            self._exec(stmt)
-    # handle different statements
-    def _exec(self, stmt):
+        # store constant pi
+        self.env.define("pi", math.pi)
+
+        # store shapes created
+        self.shapes: List[Tuple[str, GeoShape]] = []
+
+        # store labels
+        self.labels: Dict[str, str] = {}
+
+        # hidden shapes
+        self.hidden: set[str] = set()
+
+        # notes
+        self.notes: List[str] = []
+
+        # grid flag
+        self.show_grid: bool = False
+
+        # assertion tracking
+        self.assertions_passed: int = 0
+        self.assertions_failed: List[str] = []
+
+        self._backend = geometry_backend
+
+    # run all statements
+    def run(self, program: Any) -> Environment:
+        try:
+            for stmt in program.statements:
+                self._exec(stmt, self.env)
+        except ReturnSignal:
+            raise GeoRuntimeError("return used outside function")
+        return self.env
+
+    # execute one statement
+    def _exec(self, stmt: Any, env: Environment) -> None:
+
         # variable declaration
-        if stmt.type == "let":
-            self.env[stmt.name] = self._eval(stmt.value)
-        # shape creation
-        elif stmt.type == "shape":
-            shape = GeoShape(stmt.kind, stmt.name)
-            self.shapes.append((stmt.name, shape))
-            self.env[stmt.name] = shape
+        if hasattr(stmt, "name") and hasattr(stmt, "value"):
+            val = self._eval(stmt.value, env)
+            env.define(stmt.name, val)
+
+        # ignore unknown for now
         else:
-            print("Unknown statement")
-            
+            pass
+
     # evaluate expressions
-    def _eval(self, expr):
-        # number value
-        if expr.type == "number":
+    def _eval(self, expr: Any, env: Environment) -> Any:
+
+        # number
+        if hasattr(expr, "value") and isinstance(expr.value, (int, float)):
             return expr.value
-        # variable access
-        if expr.type == "identifier":
-            return self.env.get(expr.name)
-        # binary operation
-        if expr.type == "binop":
-            left = self._eval(expr.left)
-            right = self._eval(expr.right)
-            if expr.op == "+":
-                return left + right
-            if expr.op == "-":
-                return left - right
+
+        # variable
+        if hasattr(expr, "name"):
+            return env.get(expr.name)
+
         return None
+
+    # binary operations
+    def _eval_binop(self, left: Any, right: Any, op: str) -> float:
+        try:
+            l = float(left)
+            r = float(right)
+        except (TypeError, ValueError):
+            raise GeoTypeError("invalid operands")
+
+        if op == "+":
+            return l + r
+        if op == "-":
+            return l - r
+        if op == "*":
+            return l * r
+        if op == "/":
+            if r == 0:
+                raise GeoDivisionByZero()
+            return l / r
+
+        raise GeoRuntimeError("unknown operator")
+
+    # simple function call
+    def _call_function(
+        self,
+        name: str,
+        func_val: Any,
+        args: List[Any],
+        env: Environment,
+    ) -> Any:
+        if not isinstance(func_val, UserFunction):
+            raise GeoTypeError(f"{name} is not a function")
+
+        if len(args) != len(func_val.params):
+            raise GeoArgumentError(name, len(func_val.params), len(args))
+
+        call_env = func_val.closure.child()
+
+        for pname, pval in zip(func_val.params, args):
+            call_env.define(pname, pval)
+
+        try:
+            for stmt in func_val.body:
+                self._exec(stmt, call_env)
+        except ReturnSignal as ret:
+            return ret.value
+
+        return None
+
+
+# helper function to run interpreter
+def interpret(
+    program: Any,
+    geometry_backend: Optional[Any] = None,
+) -> Tuple[Interpreter, Environment]:
+
+    interp = Interpreter(geometry_backend)
+    env = interp.run(program)
+    return interp, env
