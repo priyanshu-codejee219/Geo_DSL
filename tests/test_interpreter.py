@@ -1,6 +1,7 @@
 import os
 import sys
 import unittest
+from typing import List
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
@@ -44,6 +45,7 @@ from ast_nodes.nodes import (
     RotateStmt,
     ScaleStmt,
     SetStmt,
+    Statement,
     StringLiteral,
     SweepStmt,
     TranslateStmt,
@@ -491,7 +493,7 @@ class TestFunctions(unittest.TestCase):
 
     def test_recursive_function(self):
         # build fact(n) = if n<=1: 1 else n * fact(n-1) by hand
-        fact_body = [
+        fact_body : List[Statement] = [
             IfStmt(
                 condition=cmp("<=", ident("n"), num(1)),
                 body=[ReturnStmt(num(1))],
