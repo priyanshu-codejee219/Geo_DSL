@@ -226,11 +226,13 @@ class TestConstraintClause:
         assert c.target == "AB"
 
     def test_props_and_rel_constraint(self):
-        node = first("circle C with radius = 50 tangent_to L")
-        assert len(node.props) == 1
-        assert node.props[0].name == "radius"
-        assert node.constraint.kind == "tangent_to"
-        assert node.constraint.target == "L"
+        node = first("line L of A tangent_to C")
+        assert isinstance(node, PrimitiveDecl)
+        assert node.shape_kw == TokenType.LINE
+        assert node.name == "L"
+        assert node.args == ["A"]
+        assert len(node.constraints) == 1
+        assert node.constraints[0] == RelConstraint("tangent_to", "C")
 
     def test_props_and_pos_constraint(self):
         node = first("circle C with radius = 30 centered_at O")

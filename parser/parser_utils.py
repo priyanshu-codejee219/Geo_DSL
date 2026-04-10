@@ -20,6 +20,7 @@ def peek(tokens: List[Token], pos: int, offset: int = 0) -> Token:
     return tokens[idx] if idx < len(tokens) else tokens[-1]
 
 
+# return a token and move a step forward
 def advance(tokens: List[Token], pos: int) -> tuple[Token, int]:
     tok = tokens[pos]
     new_pos = pos + 1

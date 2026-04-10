@@ -256,13 +256,13 @@ class Parser:
                 next_arg, self._pos = advance(self._tokens, self._pos)
                 args.append(next_arg.value)
 
-        if self._cur().type == TokenType.WITH:
+        elif self._cur().type == TokenType.WITH:
             self._pos += 1
-            self._skip_newlines()
+            # self._skip_newlines()
             props.append(self._parse_prop_assign())
             while self._cur().type == TokenType.COMMA:
                 self._pos += 1
-                self._skip_newlines()
+                # self._skip_newlines()
                 props.append(self._parse_prop_assign())
 
         while self._cur().type in _CONSTRAINT_KWS:
