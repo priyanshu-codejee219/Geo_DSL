@@ -33,7 +33,7 @@ from ast_nodes.nodes import (
 )
 
 from lexer.token_types import TokenType
-from semantics.analyser import SemanticAnalyser, SemanticError, analyse
+from semantics.analyser import SemanticAnalyser
 
 def num(v):
     return NumberLiteral(float(v))  
@@ -101,6 +101,7 @@ def is_clean(program: Program) -> bool:
 
 
 # class for undeclared variable checking.
+
 class TestUndeclaredName(unittest.TestCase):
     def test_label_undeclared_target(self):
         p = prog(LabelStmt("X", "hello"))
@@ -155,6 +156,7 @@ class TestUndeclaredName(unittest.TestCase):
 
 
 #class redeclaration checking.
+
 class TestRedeclaration(unittest.TestCase):
     def test_let_redeclared_same_scope(self):
         p = prog(
