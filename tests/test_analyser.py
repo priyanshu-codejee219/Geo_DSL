@@ -38,70 +38,88 @@ from ast_nodes.nodes import (
     SweepStmt,
     VectorExpr,
 )
-
 from lexer.token_types import TokenType
 from semantics.analyser import SemanticAnalyser, SemanticError, analyse
 
 def num(v):
-    return NumberLiteral(float(v))  
+    return NumberLiteral(float(v))
+
 
 def ident(n):
-    return IdentExpr(n)  
+    return IdentExpr(n)
+
 
 def ang(d):
-    return AngleLiteral(float(d))  
+    return AngleLiteral(float(d))
+
 
 def ratio(a, b):
-    return RatioLiteral(float(a), float(b)) 
+    return RatioLiteral(float(a), float(b))
+
 
 def slit(s):
-    return StringLiteral(s)  
+    return StringLiteral(s)
+
 
 def vec(x, y):
-    return VectorExpr(num(x), num(y))  
+    return VectorExpr(num(x), num(y))
+
 
 def add(a, b):
-    return BinOp("+", a, b)  
+    return BinOp("+", a, b)
+
 
 def mul(a, b):
-    return BinOp("*", a, b)  
+    return BinOp("*", a, b)
+
 
 def cmp(op, a, b):
-    return CmpExpr(op, a, b)  
+    return CmpExpr(op, a, b)
+
 
 def geo_pred(s, r, t):
-    return GeometricPred(s, r, t)  
+    return GeometricPred(s, r, t)
+
 
 def prim(kw_str, name, props=None, constraint=None):
     kw = getattr(TokenType, kw_str.upper())
     return PrimitiveDecl(kw, name, props or [], [], [], constraint)
 
+
 def prop(name, val_expr):
     return PropAssign(name, val_expr)
+
 
 def prog(*stmts):
     return Program(list(stmts))
 
+
 def rng(start, end, step):
     return RangeSpec(num(start), num(end), num(step))
+
 
 def errors_of(program: Program):
     a = SemanticAnalyser()
     return [e.message for e in a.analyse(program) if e.severity == "error"]
 
+
 def warnings_of(program: Program):
     a = SemanticAnalyser()
     return [e.message for e in a.analyse(program) if e.severity == "warning"]
+
 
 def all_messages(program: Program):
     a = SemanticAnalyser()
     return [(e.message, e.severity) for e in a.analyse(program)]
 
+
 def has_error_containing(program: Program, fragment: str) -> bool:
     return any(fragment in msg for msg in errors_of(program))
 
+
 def has_warning_containing(program: Program, fragment: str) -> bool:
     return any(fragment in msg for msg in warnings_of(program))
+
 
 def is_clean(program: Program) -> bool:
     return len(errors_of(program)) == 0
@@ -162,8 +180,7 @@ class TestUndeclaredName(unittest.TestCase):
         self.assertTrue(is_clean(p))
 
 
-#class redeclaration checking.
-
+# class redeclaration checking.
 class TestRedeclaration(unittest.TestCase):
     def test_let_redeclared_same_scope(self):
         p = prog(
