@@ -41,6 +41,7 @@ from ast_nodes.nodes import (
 from lexer.token_types import TokenType
 from semantics.analyser import SemanticAnalyser, SemanticError, analyse
 
+
 def num(v):
     return NumberLiteral(float(v))
 
@@ -126,6 +127,7 @@ def is_clean(program: Program) -> bool:
 
 
 # class for undeclared variable checking.
+
 
 class TestUndeclaredName(unittest.TestCase):
     def test_label_undeclared_target(self):
@@ -235,6 +237,7 @@ class TestRedeclaration(unittest.TestCase):
 
 # class for checking use before assignment
 
+
 class TestUseBeforeAssignment(unittest.TestCase):
     def test_let_refers_to_later_let(self):
         p = prog(
@@ -262,8 +265,8 @@ class TestUseBeforeAssignment(unittest.TestCase):
         self.assertTrue(has_error_containing(p, "t"))
 
 
-
 # class for checking setting on wrong kind
+
 
 class TestSetOnWrongKind(unittest.TestCase):
     def test_set_on_shape(self):
@@ -309,6 +312,7 @@ class TestSetOnWrongKind(unittest.TestCase):
 
 # class for checking sweeping on wrong kind
 
+
 class TestSweepOnWrongKind(unittest.TestCase):
     def test_sweep_on_let(self):
         p = prog(
@@ -340,8 +344,8 @@ class TestSweepOnWrongKind(unittest.TestCase):
         self.assertTrue(is_clean(p))
 
 
-
 # class for checking wrong no of args
+
 
 class TestWrongArgCount(unittest.TestCase):
     def test_too_few_args(self):
@@ -382,6 +386,7 @@ class TestWrongArgCount(unittest.TestCase):
 
 # class for checking return statement outside the class
 
+
 class TestReturnOutsideFunction(unittest.TestCase):
     def test_return_at_top_level(self):
         p = prog(ReturnStmt(num(42)))
@@ -410,6 +415,7 @@ class TestReturnOutsideFunction(unittest.TestCase):
 
 
 # class for type checking in expressions
+
 
 class TestTypeCheckingInExpressions(unittest.TestCase):
     def test_string_in_arithmetic(self):
@@ -493,8 +499,8 @@ class TestFunctionReturnConsistency(unittest.TestCase):
         self.assertFalse(has_warning_containing(p, "no 'return'"))
 
 
-
 # class for checking argument type
+
 
 class TestArgumentTypeChecking(unittest.TestCase):
     def test_shape_passed_as_arg_warns(self):
@@ -512,7 +518,6 @@ class TestArgumentTypeChecking(unittest.TestCase):
             CallStmt("double", [ident("r")]),
         )
         self.assertFalse(has_warning_containing(p, "SHAPE"))
-
 
 
 class TestShadowingRules(unittest.TestCase):
@@ -586,6 +591,7 @@ class TestParamRangeValidation(unittest.TestCase):
 
 # class for checking dead code in program.
 
+
 class TestDeadCode(unittest.TestCase):
     def test_stmt_after_return_warns(self):
         p = prog(
@@ -638,6 +644,7 @@ class TestDeadCode(unittest.TestCase):
 
 
 # class for correct tests
+
 
 class TestHappyPath(unittest.TestCase):
     def test_empty_program(self):
@@ -760,11 +767,12 @@ class TestHappyPath(unittest.TestCase):
 
 # class for collecting errors
 
+
 class TestErrorAccumulation(unittest.TestCase):
     def test_multiple_errors_collected(self):
         p = prog(
-            LabelStmt("X", "missing"),  
-            SetStmt("Y", num(5)),  
+            LabelStmt("X", "missing"),
+            SetStmt("Y", num(5)),
         )
         errs = errors_of(p)
         self.assertGreaterEqual(len(errs), 2)
@@ -784,7 +792,6 @@ class TestErrorAccumulation(unittest.TestCase):
         warns = warnings_of(p)
         self.assertGreaterEqual(len(errs), 1)
         self.assertGreaterEqual(len(warns), 1)
-
 
 
 class TestAnalyseConvenienceFunction(unittest.TestCase):

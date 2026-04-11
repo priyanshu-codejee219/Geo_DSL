@@ -291,11 +291,6 @@ class TestRunFor:
             assert isinstance(frame, dict)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# animation_frames — JSON serialisation
-# ─────────────────────────────────────────────────────────────────────────────
-
-
 class TestAnimationFrames:
     def test_returns_list_of_dicts(self):
         program = _parse("""
