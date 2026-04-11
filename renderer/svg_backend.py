@@ -347,7 +347,7 @@ def _order_locus_points(points: list[tuple[float, float]]) -> list[tuple[float, 
 
 def svg_locus(
     props: dict[str, Any],
-    stroke: str = "#dc2626",  # red — locus stands out
+    stroke: str = "#dc2626",
     fill: str = "none",
     stroke_width: float = 1.5,
     opacity: float = 0.95,
@@ -379,3 +379,173 @@ def svg_locus(
         f'stroke-width="{stroke_width:.3f}" opacity="{opacity}" '
         f'stroke-linecap="round" stroke-linejoin="round" />'
     )
+
+
+def svg_label(
+    x: float,
+    y: float,
+    text: str,
+    offset_x: float = LABEL_OFFSET,
+    offset_y: float = -LABEL_OFFSET,
+) -> str:
+    tx = x + offset_x
+    ty = y + offset_y
+    return (
+        f'<text x="{tx:.3f}" y="{ty:.3f}" '
+        f'font="{LABEL_FONT}" fill="#1e293b" '
+        f'font-size="13" font-family="Inter, Segoe UI, sans-serif">'
+        f"{_escape(text)}</text>"
+    )
+
+
+def svg_note(x: float, y: float, text: str) -> str:
+    return (
+        f'<text x="{x:.3f}" y="{y:.3f}" '
+        f'font="{NOTE_FONT}" fill="#475569" '
+        f'font-size="12" font-family="Inter, Segoe UI, sans-serif" '
+        f'font-style="italic">'
+        f"{_escape(text)}</text>"
+    )
+
+
+def svg_measure_annotation(
+    x1: float,
+    y1: float,
+    x2: float,
+    y2: float,
+    text: str,
+    offset: float = 18.0,
+) -> str:
+
+    mx = (x1 + x2) / 2
+    my = (y1 + y2) / 2
+    dx = x2 - x1
+    dy = y2 - y1
+    length = math.hypot(dx, dy)
+    if length < 1e-6:
+        return ""
+
+    nx = -dy / length
+    ny = dx / length
+
+    lx = mx + nx * offset
+    ly = my + ny * offset
+
+    t = 5.0
+    tick1a = (x1 + nx * t, y1 + ny * t)
+    tick1b = (x1 - nx * t, y1 - ny * t)
+    tick2a = (x2 + nx * t, y2 + ny * t)
+    tick2b = (x2 - nx * t, y2 - ny * t)
+
+    dim_style = 'stroke="#64748b" stroke-width="1" fill="none"'
+    return (
+        f'<line x1="{lx - nx * offset + nx * (offset - 2):.3f}" '
+        f'y1="{ly - ny * offset + ny * (offset - 2):.3f}" '
+        f'x2="{lx + (x2 - x1) / length * length - nx * offset + nx * (offset - 2):.3f}" '
+        f'y2="{ly + (y2 - y1) / length * length - ny * offset + ny * (offset - 2):.3f}" '
+        f"{dim_style} />"
+        f'<line x1="{tick1a[0]:.3f}" y1="{tick1a[1]:.3f}" '
+        f'x2="{tick1b[0]:.3f}" y2="{tick1b[1]:.3f}" {dim_style} />'
+        f'<line x1="{tick2a[0]:.3f}" y1="{tick2a[1]:.3f}" '
+        f'x2="{tick2b[0]:.3f}" y2="{tick2b[1]:.3f}" {dim_style} />'
+        f'<text x="{lx:.3f}" y="{ly:.3f}" text-anchor="middle" '
+        f'font-size="11" font-family="Inter, Segoe UI, sans-serif" fill="#64748b">'
+        f"{_escape(text)}</text>"
+    )
+
+
+def svg_grid(
+    viewport_w: float,
+    viewport_h: float,
+    spacing: float = 50.0,
+    origin_x: float = 0.0,
+    origin_y: float = 0.0,
+) -> str:
+    lines: list[str] = []
+
+    gstyle = f'stroke="{GRID_STROKE}" stroke-width="{GRID_STROKE_WIDTH}"'
+    x = origin_x % spacing
+    while x <= viewport_w:
+        lines.append(
+            f'<line x1="{x:.1f}" y1="0" x2="{x:.1f}" y2="{viewport_h:.1f}" {gstyle} />'
+        )
+        x += spacing
+    y = origin_y % spacing
+    while y <= viewport_h:
+        lines.append(
+            f'<line x1="0" y1="{y:.1f}" x2="{viewport_w:.1f}" y2="{y:.1f}" {gstyle} />'
+        )
+        y += spacing
+
+    astyle = f'stroke="{AXIS_STROKE}" stroke-width="1.2"'
+    if 0 <= origin_x <= viewport_w:
+        lines.append(
+            f'<line x1="{origin_x:.1f}" y1="0" '
+            f'x2="{origin_x:.1f}" y2="{viewport_h:.1f}" {astyle} />'
+        )
+    if 0 <= origin_y <= viewport_h:
+        lines.append(
+            f'<line x1="0" y1="{origin_y:.1f}" '
+            f'x2="{viewport_w:.1f}" y2="{origin_y:.1f}" {astyle} />'
+        )
+
+    return "\n".join(lines)
+
+
+SHAPE_GENERATORS: dict[str, Any] = {
+    "point": svg_point,
+    "segment": svg_segment,
+    "line": svg_line,
+    "ray": svg_ray,
+    "circle": svg_circle,
+    "arc": svg_arc,
+    "ellipse": svg_ellipse,
+    "triangle": svg_triangle,
+    "rectangle": svg_rectangle,
+    "rhombus": svg_rhombus,
+    "parallelogram": svg_parallelogram,
+    "regular_poly": svg_regular_poly,
+    "polygon": svg_polygon,
+    "locus": svg_locus,
+}
+
+
+def render_shape(
+    kind: str,
+    props: dict[str, Any],
+    **opts: Any,
+) -> str:
+    fn = SHAPE_GENERATORS.get(kind)
+    if fn is None:
+        return f"<!-- unsupported shape kind: {kind} -->"
+    return fn(props, **opts)
+
+
+def _escape(text: str) -> str:
+    return (
+        text.replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+        .replace('"', "&quot;")
+    )
+
+
+def shape_centre(kind: str, props: dict[str, Any]) -> tuple[float, float]:
+    p = props
+    if kind == "point":
+        return float(p.get("x", 0)), float(p.get("y", 0))
+    if kind in ("circle", "arc", "ellipse", "regular_poly", "rhombus"):
+        return float(p.get("cx", 0)), float(p.get("cy", 0))
+    if kind == "segment":
+        return (
+            (float(p.get("x1", 0)) + float(p.get("x2", 0))) / 2,
+            (float(p.get("y1", 0)) + float(p.get("y2", 0))) / 2,
+        )
+    if kind in ("triangle", "rectangle", "polygon", "parallelogram", "convex_hull"):
+        n = int(p.get("n", 3 if kind == "triangle" else 4))
+        xs = [float(p.get(f"x{i}", 0)) for i in range(1, n + 1)]
+        ys = [float(p.get(f"y{i}", 0)) for i in range(1, n + 1)]
+        return (sum(xs) / max(len(xs), 1)), (sum(ys) / max(len(ys), 1))
+    if kind == "line":
+        return 0.0, 0.0
+    return 0.0, 0.0
