@@ -203,7 +203,7 @@ class Evaluator:
         return [
             {
                 "param": f.param_value,
-                "shapes": {name: _serialise_shape(s) for name, s in f.shapes.items()},
+                "shapes": {name: _serialise_shape(s) for name, s in f.shapes},
             }
             for f in frames
         ]

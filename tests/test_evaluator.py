@@ -111,7 +111,8 @@ point A at (0, 0)
 """)
         frames = _evaluator().run_sweep(program, "t")
         for f in frames:
-            assert isinstance(f.shapes, dict)
+            print(type(f.shapes))
+            assert isinstance(f.shapes, list)
 
     def test_let_depends_on_param(self):
         program = _parse("""
@@ -346,7 +347,7 @@ param t from 0 to 3 step 1
         frames = _evaluator().run_sweep(program, "t")
         assert len(frames) == 4
         for f in frames:
-            assert f.shapes == {}
+            assert f.shapes == []
 
     def test_multiple_params_sweep_one(self):
         program = _parse("""
