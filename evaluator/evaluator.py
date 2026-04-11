@@ -55,11 +55,7 @@ class Evaluator:
         while (step > 0 and v <= end + 1e-9) or (step < 0 and v >= end - 1e-9):
             frame_interp = self._factory()
 
-            # Pre-seed the param value so dependent `let` statements use it
-            # We do this by running a tiny bootstrap before the main program:
-            # define the param binding first, then run the full program.
             frame_interp.env.define(param_name, round(v, 10), mutable=True)
-            # Store range metadata so get_param_range works inside the program
             frame_interp.env.define(f"__param_{param_name}_start", start)
             frame_interp.env.define(f"__param_{param_name}_end", end)
             frame_interp.env.define(f"__param_{param_name}_step", step)
@@ -88,7 +84,6 @@ class Evaluator:
         shape_name: Optional[str] = None,
     ) -> LocusResult:
 
-        # Run the program once to build context (all other shapes)
         context_interp = self._factory()
         context_interp.run(program)
         context_env = context_interp.env
@@ -103,14 +98,12 @@ class Evaluator:
         while px <= x_end + 1e-9:
             py = y_start
             while py <= y_end + 1e-9:
-                # Create a child scope with the free point placed at (px, py)
                 test_env = context_env.child()
                 from interpreter.interpreter import GeoShape
 
                 pt_shape = GeoShape("point", locus_var, props={"x": px, "y": py})
                 test_env.define(locus_var, pt_shape)
 
-                # Evaluate the constraint using a tolerance for numeric equality.
                 try:
                     satisfied = self._eval_locus_constraint(
                         context_interp, constraint, test_env, tolerance, locus_var
@@ -200,8 +193,6 @@ class Evaluator:
             result.frames.append(dict(frame_interp.shapes))
 
         return result
-
-    # ── Convenience: single-param animation frames ────────────────────────────
 
     def animation_frames(
         self,
