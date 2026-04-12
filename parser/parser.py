@@ -101,6 +101,23 @@ _PROP_NAMES = frozenset(
     }
 )
 
+_ALLOWED_PROP_NAMES = frozenset(
+    {
+        "radius",
+        "length",
+        "angle",
+        "area",
+        "perimeter",
+        "sides",
+        "height",
+        "width",
+        "rx",
+        "ry",
+        "r_x",
+        "r_y",
+    }
+)
+
 _REL_CONSTRAINT_KWS = frozenset(
     {
         TokenType.PARALLEL_TO,
@@ -284,9 +301,12 @@ class Parser:
             TokenType.IDENT,
             *tuple(_PROP_NAMES),
         )
+        prop_name = prop_tok.value
+        if prop_name not in _ALLOWED_PROP_NAMES:
+            raise ParseError(f"Invalid property name '{prop_name}'", prop_tok)
         _, self._pos = expect(self._tokens, self._pos, TokenType.EQ)
         value = self._parse_expr()
-        return PropAssign(name=prop_tok.value, value=value)
+        return PropAssign(name=prop_name, value=value)
 
     def _parse_derived_decl(self) -> DerivedDecl:
         kw_tok, self._pos = advance(self._tokens, self._pos)

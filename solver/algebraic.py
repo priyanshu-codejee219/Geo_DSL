@@ -427,6 +427,17 @@ def resolve_circle(shape: "GeoShape", env: "Environment") -> Optional["GeoShape"
         return None
 
     radius = shape.props.get("radius")
+    area = shape.props.get("area")
+
+    # If area is given but radius is not, derive radius
+    if area is not None and radius is None:
+        radius = math.sqrt(float(area) / math.pi)
+        shape.props["radius"] = radius
+
+    # If radius is given but area is not, compute area
+    if radius is not None and area is None:
+        area = math.pi * float(radius) ** 2
+        shape.props["area"] = area
 
     for c in shape.constraints:
         kind = c.get("kind")
@@ -720,11 +731,30 @@ def resolve_regular_poly(shape: "GeoShape", env: "Environment") -> Optional["Geo
 
     sides = shape.props.get("sides") or shape.props.get("n")
     radius = shape.props.get("radius")
+    area = shape.props.get("area")
 
-    if sides is None or radius is None:
+    if sides is None:
         return None
 
     n = int(sides)
+
+    # If area is given but radius is not, derive radius
+    if area is not None and radius is None:
+        # area = (n * radius^2 / 2) * sin(2*pi/n)
+        sin_2pi_n = math.sin(2 * math.pi / n)
+        if sin_2pi_n > 1e-12:
+            radius = math.sqrt(2 * float(area) / (n * sin_2pi_n))
+            shape.props["radius"] = radius
+
+    # If radius is given but area is not, compute area
+    if radius is not None and area is None:
+        sin_2pi_n = math.sin(2 * math.pi / n)
+        area = (n * float(radius) ** 2 / 2) * sin_2pi_n
+        shape.props["area"] = area
+
+    if radius is None:
+        return None
+
     r = float(radius)
 
     cx, cy = 0.0, 0.0
@@ -792,8 +822,20 @@ def resolve_ellipse(shape: "GeoShape", env: "Environment") -> Optional["GeoShape
     if shape.kind != "ellipse":
         return None
 
-    rx = shape.props.get("rx") or shape.props.get("radius")
-    ry = shape.props.get("ry")
+    rx = shape.props.get("rx") or shape.props.get("r_x") or shape.props.get("radius")
+    ry = shape.props.get("ry") or shape.props.get("r_y")
+    area = shape.props.get("area")
+
+    if area is not None:
+        if rx is not None and ry is None:
+            ry = float(area) / (math.pi * float(rx))
+        elif ry is not None and rx is None:
+            rx = float(area) / (math.pi * float(ry))
+        elif rx is None and ry is None:
+            # Assume circle: rx = ry = sqrt(area / pi)
+            r = math.sqrt(float(area) / math.pi)
+            rx = r
+            ry = r
 
     cx, cy = 0.0, 0.0
     for c in shape.constraints:

@@ -28,12 +28,18 @@ class Renderer:
         width: int = DEFAULT_WIDTH,
         height: int = DEFAULT_HEIGHT,
         padding: int = PADDING,
-        background: str = "#f8fafc",
+        background: str = "#000000",
+        curve_color: str = "#916df7",
+        locus_color: str = "#3bf69a",
+        grid_color: str = "#ffffff",
     ) -> None:
         self.width = width
         self.height = height
         self.padding = padding
         self.background = background
+        self.curve_color = curve_color
+        self.locus_color = locus_color
+        self.grid_color = grid_color
 
     def render(self, interp: "Interpreter") -> str:
         return self.render_static(
@@ -73,6 +79,7 @@ class Renderer:
                     spacing=max(20.0, transform.scale * 50),
                     origin_x=ox,
                     origin_y=oy,
+                    grid_color=self.grid_color,
                 )
             )
 
@@ -85,6 +92,11 @@ class Renderer:
                 "viewport_w": float(self.width),
                 "viewport_h": float(self.height),
             }
+            # Apply custom colors based on shape type
+            if shape.kind == "locus":
+                opts["stroke"] = self.locus_color
+            else:
+                opts["stroke"] = self.curve_color
             svg_elem = render_shape(shape.kind, transformed_props, **opts)
             if svg_elem:
                 body_parts.append(f"  <!-- {name} ({shape.kind}) -->")
@@ -182,6 +194,7 @@ class Renderer:
                     spacing=max(20.0, transform.scale * 50),
                     origin_x=ox,
                     origin_y=oy,
+                    grid_color=self.grid_color,
                 )
             )
 
@@ -201,12 +214,14 @@ class Renderer:
                 if shape is None:
                     continue
                 tprops = transform.transform_props(shape.kind, shape.props)
-                elem = render_shape(
-                    shape.kind,
-                    tprops,
-                    viewport_w=float(self.width),
-                    viewport_h=float(self.height),
-                )
+                opts = {
+                    "viewport_w": float(self.width),
+                    "viewport_h": float(self.height),
+                    "stroke": self.locus_color
+                    if shape.kind == "locus"
+                    else self.curve_color,
+                }
+                elem = render_shape(shape.kind, tprops, **opts)
                 if not elem:
                     continue
                 begin_s = fi * frame_dur
@@ -249,6 +264,7 @@ class Renderer:
                     spacing=max(20.0, transform.scale * 50),
                     origin_x=ox,
                     origin_y=oy,
+                    grid_color=self.grid_color,
                 )
             )
 
@@ -256,12 +272,14 @@ class Renderer:
             if name in hidden:
                 continue
             tprops = transform.transform_props(shape.kind, shape.props)
-            elem = render_shape(
-                shape.kind,
-                tprops,
-                viewport_w=float(self.width),
-                viewport_h=float(self.height),
-            )
+            opts = {
+                "viewport_w": float(self.width),
+                "viewport_h": float(self.height),
+                "stroke": self.locus_color
+                if shape.kind == "locus"
+                else self.curve_color,
+            }
+            elem = render_shape(shape.kind, tprops, **opts)
             if elem:
                 body_parts.append(f"  {elem}")
 

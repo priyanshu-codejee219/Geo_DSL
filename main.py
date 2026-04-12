@@ -414,7 +414,14 @@ def main(argv: Optional[list[str]] = None) -> int:
             _ok(f"{interp.assertions_passed} assertion(s) passed")
         return 0
 
-    renderer = Renderer(width=args.width, height=args.height)
+    renderer = Renderer(
+        width=args.width,
+        height=args.height,
+        background="#000000",
+        curve_color="#916df7",
+        locus_color="#3bf69a",
+        grid_color="#ffffff",
+    )
 
     param_name = args.param or _detect_param(program)
     is_animated = _has_sweep(program) or (args.param is not None)

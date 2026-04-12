@@ -282,6 +282,13 @@ class TestResolveRectangle:
         assert r is not None
         assert _approx(r.props["height"], 5.0)
 
+    def test_area_derives_radius(self):
+        s = _shape("circle", area=math.pi * 4.0)
+        s.constraints = []
+        c = resolve_circle(s, Environment())
+        assert c is not None
+        assert _approx(c.props["radius"], 2.0)
+
 
 class TestResolveRegularPoly:
     def test_hexagon_vertex_count(self):
@@ -305,6 +312,13 @@ class TestResolveRegularPoly:
         p2 = np.array([r.props["x2"], r.props["y2"]])
         assert _approx(float(np.linalg.norm(p2 - p1)), math.sqrt(2), tol=1e-4)
 
+    def test_area_derives_radius(self):
+        s = _shape("regular_poly", sides=4, area=8.0)
+        s.constraints = []
+        r = resolve_regular_poly(s, Environment())
+        assert r is not None
+        assert _approx(r.props["radius"], 2.0)
+
 
 class TestResolveEllipse:
     def test_rx_ry_placed_at_origin(self):
@@ -315,6 +329,21 @@ class TestResolveEllipse:
         assert _approx(r.props["rx"], 80.0)
         assert _approx(r.props["ry"], 50.0)
         assert _approx(r.props["cx"], 0.0)
+
+    def test_area_derives_ry(self):
+        s = _shape("ellipse", rx=2.0, area=math.pi * 2.0 * 3.0)
+        s.constraints = []
+        r = resolve_ellipse(s, Environment())
+        assert r is not None
+        assert _approx(r.props["ry"], 3.0)
+
+    def test_area_creates_circle(self):
+        s = _shape("ellipse", area=math.pi * 4.0)
+        s.constraints = []
+        r = resolve_ellipse(s, Environment())
+        assert r is not None
+        assert _approx(r.props["rx"], 2.0)
+        assert _approx(r.props["ry"], 2.0)
 
 
 class TestResolveParallelogram:

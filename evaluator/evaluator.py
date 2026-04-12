@@ -62,6 +62,42 @@ class Evaluator:
 
             frame_interp.run(program)
 
+            # Resolve loci in this frame using the frame's environment
+            shapes_dict = dict(frame_interp.shapes)
+            locus_shapes = {
+                name: shape
+                for name, shape in shapes_dict.items()
+                if shape.kind == "locus"
+                and shape.props.get("locus_var") is not None
+                and shape.props.get("locus_constraint") is not None
+            }
+
+            if locus_shapes:
+                try:
+                    locus_range = float(frame_interp.env.get("__locus_range"))
+                except Exception:
+                    locus_range = 200.0
+                try:
+                    locus_step = float(frame_interp.env.get("__locus_step"))
+                except Exception:
+                    locus_step = 1.0
+
+                for name, shape in locus_shapes.items():
+                    locus_var = shape.props["locus_var"]
+                    locus_constraint = shape.props["locus_constraint"]
+
+                    result = self.run_locus(
+                        program=program,
+                        locus_var=locus_var,
+                        constraint=locus_constraint,
+                        x_range=(-locus_range, locus_range, locus_step),
+                        y_range=(-locus_range, locus_range, locus_step),
+                        shape_name=name,
+                        context_env=frame_interp.env,
+                    )
+
+                    shape.props["points"] = result.points
+
             frames.append(
                 SweepFrame(
                     param_name=param_name,
@@ -82,11 +118,13 @@ class Evaluator:
         x_range: Tuple[float, float, float],
         y_range: Tuple[float, float, float],
         shape_name: Optional[str] = None,
+        context_env: Optional["Environment"] = None,
     ) -> LocusResult:
 
-        context_interp = self._factory()
-        context_interp.run(program)
-        context_env = context_interp.env
+        if context_env is None:
+            context_interp = self._factory()
+            context_interp.run(program)
+            context_env = context_interp.env
 
         points: List[Tuple[float, float]] = []
 
@@ -106,7 +144,7 @@ class Evaluator:
 
                 try:
                     satisfied = self._eval_locus_constraint(
-                        context_interp, constraint, test_env, tolerance, locus_var
+                        None, constraint, test_env, tolerance, locus_var
                     )
                 except Exception:
                     satisfied = False
@@ -162,20 +200,38 @@ class Evaluator:
                 self._expr_uses_locus_var(constraint.left, locus_var)
                 or self._expr_uses_locus_var(constraint.right, locus_var)
             ):
+                if interp is None:
+                    temp_interp = self._factory()
+                    temp_interp.env = env
+                    return temp_interp._eval_bool(constraint, env)
                 return interp._eval_bool(constraint, env)
 
-            left = interp._eval(constraint.left, env)
-            right = interp._eval(constraint.right, env)
+            if interp is None:
+                temp_interp = self._factory()
+                temp_interp.env = env
+                left = temp_interp._eval(constraint.left, env)
+                right = temp_interp._eval(constraint.right, env)
+            else:
+                left = interp._eval(constraint.left, env)
+                right = interp._eval(constraint.right, env)
             try:
                 left_val = float(left)
                 right_val = float(right)
             except (TypeError, ValueError):
+                if interp is None:
+                    temp_interp = self._factory()
+                    temp_interp.env = env
+                    return temp_interp._eval_bool(constraint, env)
                 return interp._eval_bool(constraint, env)
 
             if constraint.op in ("=", "=="):
                 return abs(left_val - right_val) <= tolerance
             return abs(left_val - right_val) > tolerance
 
+        if interp is None:
+            temp_interp = self._factory()
+            temp_interp.env = env
+            return temp_interp._eval_bool(constraint, env)
         return interp._eval_bool(constraint, env)
 
     def run_for(

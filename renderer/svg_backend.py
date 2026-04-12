@@ -392,7 +392,7 @@ def svg_label(
     ty = y + offset_y
     return (
         f'<text x="{tx:.3f}" y="{ty:.3f}" '
-        f'font="{LABEL_FONT}" fill="#1e293b" '
+        f'font="{LABEL_FONT}" fill="#3b82f6" '
         f'font-size="13" font-family="Inter, Segoe UI, sans-serif">'
         f"{_escape(text)}</text>"
     )
@@ -460,10 +460,11 @@ def svg_grid(
     spacing: float = 50.0,
     origin_x: float = 0.0,
     origin_y: float = 0.0,
+    grid_color: str = GRID_STROKE,
 ) -> str:
     lines: list[str] = []
 
-    gstyle = f'stroke="{GRID_STROKE}" stroke-width="{GRID_STROKE_WIDTH}"'
+    gstyle = f'stroke="{grid_color}" stroke-width="{GRID_STROKE_WIDTH}"'
     x = origin_x % spacing
     while x <= viewport_w:
         lines.append(
