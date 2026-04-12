@@ -277,7 +277,21 @@ def resolve_line(shape: "GeoShape", env: "Environment") -> Optional["GeoShape"]:
                     vy = py - cy
                     d2 = vx**2 + vy**2
                     d = math.sqrt(d2)
-                    if d > r:
+
+                    # Handle point ON the circle (d == r)
+                    if abs(d - r) < 1e-9:
+                        # Tangent at point on circle is perpendicular to radius
+                        # Radius direction is (vx, vy)
+                        # Tangent is perpendicular: (-vy, vx)
+                        # Line equation: vx*(X - px) + vy*(Y - py) = 0
+                        a, b = vx, vy
+                        c_val = -(a * px + b * py)
+                        a, b, c_val = _normalise_line(a, b, c_val)
+                        shape.props.update({"a": a, "b": b, "c": c_val})
+                        return shape
+
+                    # Handle point OUTSIDE the circle (d > r)
+                    elif d > r:
                         cos_phi = r / d
                         sin_phi = math.sqrt(1 - cos_phi**2)
 

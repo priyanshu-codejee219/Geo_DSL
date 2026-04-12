@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="100%" height="100%" fill="#000000" />
+<line x1="16.0" y1="0" x2="16.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="112.0" y1="0" x2="112.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="208.0" y1="0" x2="208.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="304.0" y1="0" x2="304.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="400.0" y1="0" x2="400.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="496.0" y1="0" x2="496.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="592.0" y1="0" x2="592.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="688.0" y1="0" x2="688.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="784.0" y1="0" x2="784.0" y2="600.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="0" y1="60.0" x2="800.0" y2="60.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="0" y1="156.0" x2="800.0" y2="156.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="0" y1="252.0" x2="800.0" y2="252.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="0" y1="348.0" x2="800.0" y2="348.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="0" y1="444.0" x2="800.0" y2="444.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="0" y1="540.0" x2="800.0" y2="540.0" stroke="#ffffff" stroke-width="0.8" />
+<line x1="16.0" y1="0" x2="16.0" y2="600.0" stroke="#94a3b8" stroke-width="1.2" />
+  <!-- A (point) -->
+  <circle cx="208.000" cy="444.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- B (point) -->
+  <circle cx="592.000" cy="444.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- C (point) -->
+  <circle cx="400.000" cy="540.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- AB (segment) -->
+  <line x1="208.000" y1="444.000" x2="592.000" y2="444.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- AC (segment) -->
+  <line x1="208.000" y1="444.000" x2="400.000" y2="540.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- PB1 (line) -->
+  <line x1="400.000" y1="0.000" x2="400.000" y2="600.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- PB2 (line) -->
+  <line x1="550.000" y1="0.000" x2="250.000" y2="600.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- P (point) -->
+  <circle cx="400.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- C (circle) -->
+  <circle cx="400.000" cy="300.000" r="240.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <text x="410.000" y="434.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Side AB</text>
+  <text x="314.000" y="482.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Side AC</text>
+  <text x="410.000" y="290.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Circumcenter</text>
+  <text x="26.000" y="626.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Bisector AB</text>
+  <text x="26.000" y="626.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Bisector AC</text>
+  <text x="216.000" y="436.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">A</text>
+  <text x="600.000" y="436.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">B</text>
+  <text x="408.000" y="532.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">C</text>
+</svg>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="100%" height="100%" fill="#000000" />
+  <!-- A (point) -->
+  <circle cx="160.000" cy="540.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- B (point) -->
+  <circle cx="640.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- C (point) -->
+  <circle cx="400.000" cy="60.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- T (triangle) -->
+  <polygon points="160.000,540.000 640.000,300.000 400.000,60.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- BisA (ray) -->
+  <line x1="160.000" y1="540.000" x2="1291.371" y2="-591.371" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /><line x1="1291.371" y1="-591.371" x2="1289.300" y2="-583.643" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /><line x1="1291.371" y1="-591.371" x2="1283.643" y2="-589.300" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- BisB (ray) -->
+  <line x1="640.000" y1="300.000" x2="-939.340" y2="43.708" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /><line x1="-939.340" y1="43.708" x2="-931.860" y2="40.870" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /><line x1="-939.340" y1="43.708" x2="-933.142" y2="48.767" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- BisC (ray) -->
+  <line x1="400.000" y1="60.000" x2="656.292" y2="1639.340" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /><line x1="656.292" y1="1639.340" x2="651.233" y2="1633.142" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /><line x1="656.292" y1="1639.340" x2="659.130" y2="1631.860" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- AB (segment) -->
+  <line x1="160.000" y1="540.000" x2="640.000" y2="300.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- BC (segment) -->
+  <line x1="640.000" y1="300.000" x2="400.000" y2="60.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- AC (segment) -->
+  <line x1="160.000" y1="540.000" x2="400.000" y2="60.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <text x="170.000" y="530.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Vertex A</text>
+  <text x="650.000" y="290.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Vertex B</text>
+  <text x="410.000" y="50.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Vertex C</text>
+  <text x="-70.000" y="770.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Bisector A</text>
+</svg>

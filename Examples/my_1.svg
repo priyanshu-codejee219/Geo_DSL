@@ -8,14 +8,31 @@
   <circle cx="400.000" cy="60.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
   <!-- T (triangle) -->
   <polygon points="208.000,444.000 592.000,444.000 400.000,60.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- AB (segment) -->
+  <line x1="208.000" y1="444.000" x2="592.000" y2="444.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- BC (segment) -->
+  <line x1="592.000" y1="444.000" x2="400.000" y2="60.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- AC (segment) -->
+  <line x1="208.000" y1="444.000" x2="400.000" y2="60.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- Mab (point) -->
+  <circle cx="400.000" cy="444.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- Mbc (point) -->
+  <circle cx="496.000" cy="252.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- Mac (point) -->
+  <circle cx="304.000" cy="252.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- Medial (triangle) -->
+  <polygon points="400.000,444.000 496.000,252.000 304.000,252.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
   <!-- CC (circle) -->
   <circle cx="400.000" cy="300.000" r="240.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
   <!-- IC (circle) -->
   <circle cx="400.000" cy="325.337" r="118.663" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
-  <text x="410.000" y="306.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Triangle ABC</text>
+  <text x="410.000" y="306.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Medial Triangle</text>
   <text x="410.000" y="290.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Circumcircle</text>
   <text x="410.000" y="315.337" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Incircle</text>
   <text x="216.000" y="436.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">A</text>
   <text x="600.000" y="436.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">B</text>
   <text x="408.000" y="52.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">C</text>
+  <text x="408.000" y="436.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Mab</text>
+  <text x="504.000" y="244.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Mbc</text>
+  <text x="312.000" y="244.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Mac</text>
 </svg>
