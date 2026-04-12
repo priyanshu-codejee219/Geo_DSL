@@ -265,15 +265,17 @@ class Renderer:
             if elem:
                 body_parts.append(f"  {elem}")
 
+        shapes_dict = dict(shapes)
+
         for name, text in labels.items():
-            if name in hidden or name not in shapes:
+            if name in hidden or name not in shapes_dict:
                 continue
-            shape = shapes[name]
+            shape = shapes_dict[name]
             cx, cy = shape_centre(shape.kind, shape.props)
             sx, sy = transform.world_to_screen(cx, cy)
             body_parts.append(f"  {svg_label(sx, sy, text)}")
 
-        for name, shape in shapes.items():
+        for name, shape in shapes:
             if shape.kind == "point" and name not in labels and name not in hidden:
                 cx = float(shape.props.get("x", 0.0))
                 cy = float(shape.props.get("y", 0.0))
