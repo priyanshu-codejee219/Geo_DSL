@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="100%" height="100%" fill="#000000" />
+  <!-- A (point) -->
+  <circle cx="208.000" cy="444.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- B (point) -->
+  <circle cx="592.000" cy="444.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- C (point) -->
+  <circle cx="400.000" cy="60.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- T (triangle) -->
+  <polygon points="208.000,444.000 592.000,444.000 400.000,60.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- CC (circle) -->
+  <circle cx="400.000" cy="300.000" r="240.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- IC (circle) -->
+  <circle cx="400.000" cy="325.337" r="118.663" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <text x="410.000" y="306.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Triangle ABC</text>
+  <text x="410.000" y="290.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Circumcircle</text>
+  <text x="410.000" y="315.337" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Incircle</text>
+  <text x="216.000" y="436.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">A</text>
+  <text x="600.000" y="436.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">B</text>
+  <text x="408.000" y="52.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">C</text>
+</svg>
