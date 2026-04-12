@@ -1,4 +1,4 @@
-point A at (0,100) 
-point B at (400,100)
-circle C centered_at A 
-circle C centered_at B
+param t from 0 to 100 step 10
+point P at (t,t)
+grid
+sweep t
