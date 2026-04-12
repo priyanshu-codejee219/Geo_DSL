@@ -1,19 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
   <rect width="100%" height="100%" fill="#000000" />
-  <g id="shape_Origin">
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.000s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.083s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.167s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.250s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.333s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.417s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" /></g>
-  </g>
-  <g id="shape_c">
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.000s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="120.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.083s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="144.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.167s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="168.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.250s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="192.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.333s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="216.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /></g>
-    <g visibility="hidden"><animate attributeName="visibility" values="visible;hidden" keyTimes="0;1" begin="0.417s" dur="0.083s" repeatCount="indefinite" /><circle cx="400.000" cy="300.000" r="240.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" /></g>
-  </g>
+  <!-- A (point) -->
+  <circle cx="128.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- B (point) -->
+  <circle cx="672.000" cy="300.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- C (circle) -->
+  <circle cx="128.000" cy="300.000" r="68.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <!-- C (circle) -->
+  <circle cx="672.000" cy="300.000" r="68.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <text x="136.000" y="292.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">A</text>
+  <text x="680.000" y="292.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">B</text>
 </svg>
