@@ -13,7 +13,3 @@ point Y at (l*cos(theta*3.14/180),0)
 segment XY of X Y
 midpoint MP of XY
 sweep theta
-
-label A "Wall"
-label B "Ground"
-
