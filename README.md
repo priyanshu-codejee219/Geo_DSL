@@ -178,7 +178,35 @@ python -m ruff check .
 > Work distribution is also documented in the project git commit history.
 
 ## User Survey Summary
+Contribution
 
+Rhea - 40 %
+Lexer - lexer.py
+parser - parser_utils.py, parser.py
+solver - numeric.py, solver.py
+renderer - svg_backend.py, renderer.py
+Testing - test_parser.py, test_renderer.py
+Linting
+Readme.md
+User Survey
+
+Priyanshu - 40 %
+Lexer - token_types.py
+AST nodes - ast_nodes.py
+Parser - parser.py
+Sovler - algebraic.py
+evaluator - evaluator.py
+renderer - svg_backend.py
+Testing - test_evaluator.py, test_lexer.py, test_solver.py
+
+Ankit - 10%
+Semantics - anayser.py
+Interpreter - errors.py, interpreter.py
+Testing - test_interpreter.py
+
+Shashank - 10%
+Interpreter - environment.py
+Testing - test_analyser.py
 
 ## Notes
 
