@@ -6,7 +6,6 @@ define equilateral(cx, cy, r) {
   triangle EquilateralTriangle of V1 V2 V3
   return EquilateralTriangle
 }
-param t from 1 to 100 step 10
-call equilateral(0,0,10*t)
-if t>50{circle C with radius=10*t}
+param t from 10 to 100 step 20
+call equilateral(0,0,t)
 sweep t
