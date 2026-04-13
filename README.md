@@ -18,9 +18,6 @@ Geo_DSL uses simple English-like keywords and expressions to define points, line
 
 ---
 
-##  Supported Keywords
-
-
 ## Supported Keywords
 
 ### Shapes
