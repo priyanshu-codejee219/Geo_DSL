@@ -183,6 +183,8 @@ python -m ruff check .
 - Linting
 - README.md
 - User Survey
+- Syntax and Grammar
+- Video presentation and ppt
 
 ### Priyanshu - 40%
 - Lexer: `token_types.py`
@@ -192,6 +194,8 @@ python -m ruff check .
 - Evaluator: `evaluator.py`
 - Renderer: `svg_backend.py`
 - Testing: `test_evaluator.py`, `test_lexer.py`, `test_solver.py`
+- Syntax and Grammar
+- Video Presentation and ppt
 
 ### Ankit - 10%
 - Interpreter: `errors.py`, `interpreter.py`
