@@ -20,7 +20,7 @@ Geo_DSL uses simple English-like keywords and expressions to define points, line
 
 ##  Supported Keywords
 
-```markdown
+
 ## Supported Keywords
 
 ### Shapes
@@ -99,7 +99,7 @@ Geo_DSL uses simple English-like keywords and expressions to define points, line
 Geo_DSL expressions support numeric arithmetic, trigonometry, and references to parameters and variables. Example operators include `+`, `-`, `*`, `/` and math functions such as `sin(...)` and `cos(...)`.
 For detailed description use Guides added in the Repo
 
-### Sample Program
+## Sample Program
 
 The sample program below is `Examples/sample6.geo`. It visualizes a math problem where a stick slides down a wall and the locus of the midpoint of the stick is traced.
 
@@ -133,7 +133,7 @@ label B "Ground"
 
 ### Actual visual output
 
-Rendering `Examples/sample6.geo` produces an animated SVG with the following visual result:
+Rendering `Examples/sample6.geo` produces an animated SVG with the following visual result(Click to view animated output):
 
 ![My Animation](Examples/sample6.svg)
 
