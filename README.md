@@ -93,7 +93,7 @@ Geo_DSL uses simple English-like keywords and expressions to define points, line
 
 ### Assertions
 - `assert`
-- `verify`
+
 ### Expression support
 
 Geo_DSL expressions support numeric arithmetic, trigonometry, and references to parameters and variables. Example operators include `+`, `-`, `*`, `/` and math functions such as `sin(...)` and `cos(...)`.
