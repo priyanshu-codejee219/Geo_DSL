@@ -98,7 +98,7 @@ Geo_DSL uses simple English-like keywords and expressions to define points, line
 
 Geo_DSL expressions support numeric arithmetic, trigonometry, and references to parameters and variables. Example operators include `+`, `-`, `*`, `/` and math functions such as `sin(...)` and `cos(...)`.
 
-## Sample Program
+### Sample Program
 
 The sample program below is `Examples/sample6.geo`. It visualizes a math problem where a stick slides down a wall and the locus of the midpoint of the stick is traced.
 
