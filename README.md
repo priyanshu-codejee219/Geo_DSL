@@ -15,28 +15,98 @@ Geo_DSL is a domain-specific language for building and rendering 2D Euclidean ge
 
 Geo_DSL uses simple English-like keywords and expressions to define points, lines, rays, segments, circles, loci, parameters, and animated sweeps.
 
-### Core concepts
 
-- `point <Name> at (<x>,<y>)`
-- `segment <Name> of <P1> <P2>`
-- `line <Name> of <P1> <P2>`
-- `ray <Name> of <P1> <P2>`
-- `midpoint <Name> of <AB> `
-- `param <name> from <start> to <end> step <delta>`
-- `sweep <parameter>`
-- `label <Shape> "Text"`
-- `let <name> = <expression>`
+## Core Concepts
 
-### Supported keywords
+Geo_DSL is a **constraint-based geometry language**. Instead of explicitly computing coordinates, users define geometric relationships, and the system resolves positions automatically.
 
-Geo_DSL supports geometric construction, constraint, and rendering keywords such as:
+### 1. Primitive Shapes
 
-- Shapes: `point`, `segment`, `line`, `ray`, `circle`, `arc`, `triangle`, `rectangle`, `rhombus`, `regular_poly`, `polygon`, `ellipse`, `parallelogram`
-- Derived constructions: `midpoint`, `intersection`, `perpendicular_bisector`, `angle_bisector`, `circumcircle`, `incircle`, `convex_hull`, `locus`
-- Control and animation: `param`, `from`, `to`, `step`, `sweep`, `speed`, `if`, `else`, `for`, `in`
-- Rendering: `label`, `note`, `show`, `hide`, `draw`, `grid`, `animate`, `measure`
-- Assertions: `assert`, `verify`
+Primitive shapes form the foundation of all constructions:
 
+- `point` → A location in 2D space  
+- `segment` → A finite line between two points  
+- `line` → Infinite in both directions  
+- `ray` → A half-line starting at a point  
+- `circle`, `arc`, `triangle`, `polygon`, etc.
+
+
+## Supported Keywords
+
+```markdown
+## Supported Keywords
+
+### Shapes
+- `point`, `segment`, `line`, `ray`
+- `circle`, `arc`, `triangle`
+- `rectangle`, `rhombus`, `polygon`
+- `regular_poly`, `ellipse`, `parallelogram`
+
+---
+
+### Constraints
+- `at`
+- `on`
+- `passes_through`
+- `centered_at`
+- `parallel_to`
+- `perpendicular_to`
+- `tangent_to`
+- `bisects`
+
+---
+
+### Variables & Parameters
+- `let`
+- `set`
+- `param`
+- `from`, `to`, `step`
+
+---
+
+### Control & Animation
+- `sweep`
+- `if`, `else`
+- `for`, `in`
+- `speed`
+
+---
+
+### Derived Constructions
+- `midpoint`
+- `intersection`
+- `perpendicular_bisector`
+- `angle_bisector`
+- `circumcircle`
+- `incircle`
+- `convex_hull`
+- `locus`
+
+---
+
+### Transformations
+- `translate`
+- `rotate`
+- `scale`
+- `reflect`
+
+---
+
+### Rendering
+- `label`
+- `note`
+- `show`
+- `hide`
+- `draw`
+- `grid`
+- `animate`
+- `measure`
+
+---
+
+### Assertions
+- `assert`
+- `verify`
 ### Expression support
 
 Geo_DSL expressions support numeric arithmetic, trigonometry, and references to parameters and variables. Example operators include `+`, `-`, `*`, `/` and math functions such as `sin(...)` and `cos(...)`.
@@ -77,13 +147,6 @@ label B "Ground"
 
 Rendering `Examples/sample6.geo` produces an animated SVG with the following visual result:
 
-- Canvas size: `800x600` with a dark background.
-- A vertical wall ray drawn on the left side and a horizontal ground ray at the bottom.
-- The stick segment `XY` animates as it slides down from the wall to the ground over 90 frames.
-- The midpoint `MP` is rendered as a small blue point with a purple outline, moving along the path defined by the stick.
-- Point `O` remains fixed at the wall-ground intersection, while labeled points `A` and `B` mark the wall and ground anchors.
-- The animation output is written to `sample6.svg` when using the `-o sample6.svg` command.
-
 ![My Animation](Examples/sample6.svg)
 
 ## How to Build and Run
@@ -115,18 +178,6 @@ Render and open in the browser:
 python main.py Examples/sample6.geo --open
 ```
 
-Check the program without writing output:
-
-```bash
-python main.py Examples/sample6.geo --check
-```
-
-Print tokens or AST for debugging:
-
-```bash
-python main.py Examples/sample6.geo --tokens
-python main.py Examples/sample6.geo --ast
-```
 
 ## Tests and Linting
 
