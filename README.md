@@ -132,7 +132,7 @@ label B "Ground"
 
 ### Actual visual output
 
-Rendering `Examples/sample6.geo` produces an animated SVG with the following visual result:
+Rendering `Examples/sample6.geo` produces an animated SVG with the following visual result(Click to view animated output):
 
 ![My Animation](Examples/sample6.svg)
 
