@@ -52,7 +52,6 @@ Geo_DSL uses simple English-like keywords and expressions to define points, line
 - `sweep`
 - `if`, `else`
 - `for`, `in`
-- `speed`
 
 ---
 
