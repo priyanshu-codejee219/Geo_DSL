@@ -16,22 +16,9 @@ Geo_DSL is a domain-specific language for building and rendering 2D Euclidean ge
 Geo_DSL uses simple English-like keywords and expressions to define points, lines, rays, segments, circles, loci, parameters, and animated sweeps.
 
 
-## Core Concepts
+---
 
-Geo_DSL is a **constraint-based geometry language**. Instead of explicitly computing coordinates, users define geometric relationships, and the system resolves positions automatically.
-
-### 1. Primitive Shapes
-
-Primitive shapes form the foundation of all constructions:
-
-- `point` → A location in 2D space  
-- `segment` → A finite line between two points  
-- `line` → Infinite in both directions  
-- `ray` → A half-line starting at a point  
-- `circle`, `arc`, `triangle`, `polygon`, etc.
-
-
-## Supported Keywords
+##  Supported Keywords
 
 ```markdown
 ## Supported Keywords
