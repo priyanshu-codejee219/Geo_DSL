@@ -194,11 +194,11 @@ python -m ruff check .
 - Testing: `test_evaluator.py`, `test_lexer.py`, `test_solver.py`
 
 ### Ankit - 10%
-- Semantics: `analyser.py`
 - Interpreter: `errors.py`, `interpreter.py`
 - Testing: `test_interpreter.py`
 
 ### Shashank - 10%
+- Semantics: `analyser.py`
 - Interpreter: `environment.py`
 - Testing: `test_analyser.py`
 
