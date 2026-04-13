@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="100%" height="100%" fill="#000000" />
+  <!-- Origin (point) -->
+  <circle cx="320.000" cy="380.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- A (point) -->
+  <circle cx="640.000" cy="380.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- B (point) -->
+  <circle cx="480.000" cy="102.880" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- C (point) -->
+  <circle cx="640.000" cy="60.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- D (point) -->
+  <circle cx="160.000" cy="380.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- E (point) -->
+  <circle cx="320.000" cy="540.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- F (point) -->
+  <circle cx="480.000" cy="220.000" r="4.0" stroke="#916df7" fill="#2563eb" opacity="1.0" />
+  <!-- Hull1 (polygon) -->
+  <polygon points="160.000,380.000 480.000,102.880 640.000,60.000 640.000,380.000 320.000,540.000" stroke="#916df7" fill="none" stroke-width="1.8" opacity="1.0" />
+  <text x="328.000" y="372.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">Origin</text>
+  <text x="648.000" y="372.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">A</text>
+  <text x="488.000" y="94.880" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">B</text>
+  <text x="648.000" y="52.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">C</text>
+  <text x="168.000" y="372.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">D</text>
+  <text x="328.000" y="532.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">E</text>
+  <text x="488.000" y="212.000" font="13px 'Inter', 'Segoe UI', sans-serif" fill="#3b82f6" font-size="13" font-family="Inter, Segoe UI, sans-serif">F</text>
+</svg>
