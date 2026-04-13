@@ -1,6 +1,6 @@
 # Geo_DSL
 
-## Overview
+## Motivation
 
 Geo_DSL is a domain-specific language for building and rendering 2D Euclidean geometry scenes with constraints, animation, and loci. It is designed to help visual learners in mathematics and geometry, as well as teachers, explain geometric motion and locus behavior using a readable script format.
 
@@ -83,6 +83,8 @@ Rendering `Examples/sample6.geo` produces an animated SVG with the following vis
 - The midpoint `MP` is rendered as a small blue point with a purple outline, moving along the path defined by the stick.
 - Point `O` remains fixed at the wall-ground intersection, while labeled points `A` and `B` mark the wall and ground anchors.
 - The animation output is written to `sample6.svg` when using the `-o sample6.svg` command.
+
+![My Animation](Examples/sample6.svg)
 
 ## How to Build and Run
 
