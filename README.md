@@ -78,12 +78,9 @@ Geo_DSL uses simple English-like keywords and expressions to define points, line
 ### Rendering
 - `label`
 - `note`
-- `show`
 - `hide`
-- `draw`
 - `grid`
-- `animate`
-- `measure`
+
 
 ---
 
@@ -116,8 +113,6 @@ segment XY of X Y
 midpoint MP of XY
 sweep theta
 
-label A "Wall"
-label B "Ground"
 ```
 
 ### Expected output
