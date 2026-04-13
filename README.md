@@ -205,8 +205,36 @@ python -m ruff check .
 ---
 
 > Work distribution is also documented in the project git commit history.
+## User Survey Questions
+
+- How difficult was it to learn Geo_DSL syntax? (1 = very easy, 5 = very difficult)
+- How does Geo_DSL compare to other tools you have used for 2D constructions in the past?
+- What is the most useful feature of the language according to you?
+- What was the most confusing feature of the DSL?
+- Are there any suggestions you would want us to implement in Geo_DSL?
+- Which parts of the language did you actually try?
+- How natural did describing geometry by constraints feel compared to writing coordinates directly? (1–5)
+- Overall satisfaction with GeoScript
+
+---
+
 ## User Survey Summary
 
+### Syntax and Grammar
+- Easy to learn and understand  
+- Flows naturally, similar to English  
+
+### Implemented Changes
+- Improved SVG output (coloring, grid)  
+  - Easy to implement  
+  - Significantly improves visualization for learners  
+
+- Fixed area constraint for basic shapes  
+  - Resolved a major bug  
+
+### Suggestions Not Implemented
+- Scrolling in output (up/down)  
+  - Not necessary for the intended visualization use case  
 
 ## Notes
 
