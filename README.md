@@ -1,4 +1,4 @@
-# Geo_DSL
+# Group 29
 
 ## Motivation
 
