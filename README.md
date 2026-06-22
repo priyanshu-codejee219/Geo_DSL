@@ -16,7 +16,7 @@ Geo_DSL is a domain-specific language for building and rendering 2D Euclidean ge
 Geo_DSL uses simple English-like keywords and expressions to define points, lines, rays, segments, circles, loci, parameters, and animated sweeps.
 For a more detailed guide, go through the user guide present in the same repository
 
-
+![My Animation](Examples/sample6.svg)
 ---
 
 ## Supported Keywords
