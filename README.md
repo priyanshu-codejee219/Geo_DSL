@@ -173,43 +173,6 @@ Run linting with Ruff:
 python -m ruff check .
 ```
 
-## Member Contributions
-
-### Rhea - 40%
-- Lexer: `lexer.py`
-- Parser: `parser_utils.py`, `parser.py`
-- Solver: `numeric.py`, `solver.py`
-- Renderer: `svg_backend.py`, `renderer.py`
-- Testing: `test_parser.py`, `test_renderer.py`
-- Linting
-- README.md
-- User Survey
-- Syntax and Grammar
-- Video presentation and ppt
-
-### Priyanshu - 40%
-- Lexer: `token_types.py`
-- AST Nodes: `ast_nodes.py`
-- Parser: `parser.py`
-- Solver: `algebraic.py`
-- Evaluator: `evaluator.py`
-- Renderer: `svg_backend.py`
-- Testing: `test_evaluator.py`, `test_lexer.py`, `test_solver.py`
-- Syntax and Grammar
-- Video Presentation and ppt
-
-### Ankit - 10%
-- Interpreter: `errors.py`, `interpreter.py`
-- Testing: `test_interpreter.py`
-
-### Shashank - 10%
-- Semantics: `analyser.py`
-- Interpreter: `environment.py`
-- Testing: `test_analyser.py`
-
----
-
-> Work distribution is also documented in the project git commit history.
 ## User Survey Questions
 https://docs.google.com/forms/d/e/1FAIpQLSdf-SLnCI8q26a0v1o54XckIPej9POtIpeAE9iIeP1VhaXIww/viewform?usp=publish-editor
 
